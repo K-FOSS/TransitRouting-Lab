@@ -3,6 +3,7 @@ import { plainToInstance } from 'class-transformer';
 import got, { OptionsOfJSONResponseBody } from 'got';
 import { CONFIG } from '../../Library/Config';
 import { logger, LogMode } from '../../Library/Logger';
+import { GoTransitStop, GoTransitStopType } from './Stop';
 import { GoTransitTrainTrip } from './TrainTrip';
 import { GoTransitUnionDepartureTrip } from './UnionDeparture';
 
@@ -19,6 +20,7 @@ interface APIMetadata {
 
   ErrorMessage: string;
 }
+
 interface APIResponse {
   Metadata: APIMetadata;
 }
@@ -61,6 +63,12 @@ export class GoTransit {
     return request.body;
   }
 
+  /**
+   * Gets all the trains soon arriving at Union and the platform allocation
+   * if provided/same as the departure board/go tracker.
+   * 
+   * @returns array of GoTransitUnionDepartureTrip
+   */
   public async unionDepartures(): Promise<GoTransitUnionDepartureTrip[]> {
     const response = await this.makeRequest<
       APIResponse & { AllDepartures: { Trip: GoTransitUnionDepartureTrip[] } }
@@ -72,11 +80,31 @@ export class GoTransit {
     );
   }
 
+
+  /**
+   * Function to get all active trains within the Go Transit network.
+   *
+   * @returns All active trains in Go Network
+   */
   public async getAllTrains(): Promise<GoTransitTrainTrip[]> {
     const response = await this.makeRequest<
       APIResponse & { Trips: { Trip: GoTransitUnionDepartureTrip[] } }
     >('ServiceataGlance/Trains/All');
 
     return plainToInstance(GoTransitTrainTrip, response.Trips.Trip);
+  }
+
+  /**
+   * Get all Go Transit Stops within the network
+   * 
+   * @returns Array of all Go Transit Bus Stops, 
+   * Bus Terminals, Bus & Train Stations, and Park & Ride Stops
+   */
+  public async getAllStops(): Promise<GoTransitStop[]> {
+    const response = await this.makeRequest<
+      APIResponse & { Stations: { Station: GoTransitStop[] } }
+    >('Stop/All');
+
+    return plainToInstance(GoTransitStop, response.Stations.Station);
   }
 }

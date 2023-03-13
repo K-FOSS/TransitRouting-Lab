@@ -1,30 +1,25 @@
 // src/index.ts
 import 'reflect-metadata';
 import { CONFIG } from './Library/Config';
-import { initiCloud } from './Library/iCloud';
 import { logger, LogMode } from './Library/Logger';
 import { GoTransit } from './Modules/GoTransit';
-import { User } from './Modules/User';
 import { sayHello } from './Utils/sayHello';
-
-
 
 logger.log(LogMode.INFO, `Starting TransitRouting`);
 
+// logger.log(LogMode.INFO, `Init iCloud Library`);
+// await initiCloud();
 
-logger.log(LogMode.INFO, `Init iCloud Library`);
-await initiCloud();
+// logger.log(LogMode.INFO, `Creating Kristine Entity`);
 
-logger.log(LogMode.INFO, `Creating Kristine Entity`);
+// const kristine = new User();
 
-const kristine = new User();
+// await kristine.findUserNotifyDevice(`Kristine’s Apple Watch`);
 
-await kristine.findUserNotifyDevice(`Kristine’s Apple Watch`);
-
-await kristine.notifyUser({
-  subject: 'Platform Assignment',
-  text: 'Platform 6 & 7'
-})
+// await kristine.notifyUser({
+//   subject: 'Platform Assignment',
+//   text: 'Platform 6 & 7'
+// })
 
 const goAPI = new GoTransit({
   apiURL: CONFIG.apiURL,

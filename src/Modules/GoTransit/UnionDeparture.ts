@@ -1,7 +1,14 @@
 // src/Modules/GoTransit/Trips.ts
 import { IsDate, IsNumber, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
-import { GoTransitStop } from './Stop';
+
+export class GoTransitUnionDepartureStop {
+  @Type(() => String)
+  @IsString()
+  public Name: string;
+
+  public Code: string | null;
+}
 
 export class GoTransitUnionDepartureTrip {
   @Type(() => String)
@@ -28,6 +35,6 @@ export class GoTransitUnionDepartureTrip {
   @IsDate()
   public Time: Date;
 
-  @Type(() => GoTransitStop)
-  public Stops: GoTransitStop[];
+  @Type(() => GoTransitUnionDepartureStop)
+  public Stops: GoTransitUnionDepartureStop[];
 }
