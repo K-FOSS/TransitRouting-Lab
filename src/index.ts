@@ -1,4 +1,5 @@
 // src/index.ts
+import 'reflect-metadata';
 import { CONFIG } from './Library/Config';
 import { logger, LogMode } from './Library/Logger';
 import { GoTransit } from './Modules/GoTransit';

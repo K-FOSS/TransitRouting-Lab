@@ -38,6 +38,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "got": "^12.6.0"
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "got": "^12.6.0",
+    "reflect-metadata": "^0.1.13"
   }
 }

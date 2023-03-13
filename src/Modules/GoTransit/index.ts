@@ -1,8 +1,10 @@
 // src/Modules/GoTransit/index.ts
+import { plainToClass, plainToInstance } from 'class-transformer';
 import got, { OptionsOfJSONResponseBody } from 'got';
 import { CONFIG } from '../../Library/Config';
 import { logger, LogMode } from '../../Library/Logger';
 import { AllDeparturesResponse, APIResponse } from './apiTypes';
+import { GoTransitTrip } from './Trip';
 
 interface GoTransitConfig {
   apiToken: string;
@@ -53,10 +55,8 @@ export class GoTransit {
       'ServiceUpdate/UnionDepartures/All',
     );
 
-    logger.log(LogMode.DEBUG, `Requesting Union Station departures`);
+    const trips = plainToInstance(GoTransitTrip, response.AllDepartures.Trip);
 
-    for (const { Stops } of response.AllDepartures.Trip) {
-      logger.log(LogMode.DEBUG, `Stops`, Stops);
-    }
+    logger.log(LogMode.DEBUG, `Requested Union Station departures`, trips);
   }
 }

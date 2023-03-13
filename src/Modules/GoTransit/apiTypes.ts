@@ -1,5 +1,7 @@
 // src/Modules/GoTransit/apiTypes.ts
 
+import { GoTransitTrip } from './Trip';
+
 interface APIMetadata {
   TimeStamp: string;
 
@@ -12,31 +14,8 @@ export interface APIResponse {
   Metadata: APIMetadata;
 }
 
-interface Stop {
-  Name: string;
-
-  Code: null | unknown;
-}
-
-interface Trip {
-  Info: string;
-
-  TripNumber: string;
-
-  Platform: string;
-
-  Service: string;
-
-  // TODO T/B?
-  ServiceType: string;
-
-  Time: string;
-
-  Stops: Stop[];
-}
-
 export interface Departure {
-  Trip: Trip[];
+  Trip: GoTransitTrip[];
 }
 
 export interface AllDeparturesResponse extends APIResponse {
