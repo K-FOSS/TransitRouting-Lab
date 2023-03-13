@@ -15,7 +15,19 @@ const goAPI = new GoTransit({
 
 logger.log(LogMode.INFO, `Making request`);
 
-await goAPI.unionDepartures();
+const unionDepartures = await goAPI.unionDepartures();
+
+for (const departure of unionDepartures) {
+  if (departure.Service === 'Kitchener') {
+    if (departure.Platform !== '-') {
+      logger.log(
+        LogMode.DEBUG,
+        `Union Departure to Kitchener at platform`,
+        departure.Platform,
+      );
+    }
+  }
+}
 
 await sayHello('K-FOSS');
 

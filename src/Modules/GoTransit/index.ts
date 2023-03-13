@@ -1,5 +1,5 @@
 // src/Modules/GoTransit/index.ts
-import { plainToClass, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import got, { OptionsOfJSONResponseBody } from 'got';
 import { CONFIG } from '../../Library/Config';
 import { logger, LogMode } from '../../Library/Logger';
@@ -50,13 +50,11 @@ export class GoTransit {
     return request.body;
   }
 
-  public async unionDepartures(): Promise<void> {
+  public async unionDepartures(): Promise<GoTransitTrip[]> {
     const response = await this.makeRequest<AllDeparturesResponse>(
       'ServiceUpdate/UnionDepartures/All',
     );
 
-    const trips = plainToInstance(GoTransitTrip, response.AllDepartures.Trip);
-
-    logger.log(LogMode.DEBUG, `Requested Union Station departures`, trips);
+    return plainToInstance(GoTransitTrip, response.AllDepartures.Trip);
   }
 }
