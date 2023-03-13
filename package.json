@@ -38,6 +38,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "bullmq": "^3.10.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "got": "^12.6.0",
