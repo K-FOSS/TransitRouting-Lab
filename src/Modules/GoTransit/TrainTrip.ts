@@ -1,5 +1,4 @@
 // src/Modules/GoTransit/TrainTrip.ts
-
 import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
 
