@@ -8,6 +8,6 @@ export const apiRequest = got.extend({
   responseType: 'json',
 
   searchParams: {
-    token: CONFIG.token,
+    key: CONFIG.token,
   },
 });

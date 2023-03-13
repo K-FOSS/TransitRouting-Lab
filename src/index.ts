@@ -1,19 +1,20 @@
 // src/index.ts
 import { CONFIG } from './Library/Config';
 import { logger, LogMode } from './Library/Logger';
-import { apiRequest } from './Library/makeRequest';
+import { GoTransit } from './Modules/GoTransit';
 import { sayHello } from './Utils/sayHello';
 
 logger.log(LogMode.INFO, `Starting TransitRouting`);
 
-const stuff = await apiRequest('ServiceUpdate/UnionDepartures/All', {
-  method: 'GET',
-  searchParams: {
-    key: CONFIG.token,
-  },
+const goAPI = new GoTransit({
+  apiURL: CONFIG.apiURL,
+
+  apiToken: CONFIG.token,
 });
 
-logger.log(LogMode.INFO, `API: `, stuff.body.AllDepartures);
+logger.log(LogMode.INFO, `Making request`);
+
+await goAPI.unionDepartures();
 
 await sayHello('K-FOSS');
 
