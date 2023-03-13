@@ -29,6 +29,14 @@ for (const departure of unionDepartures) {
   }
 }
 
+const trains = await goAPI.getAllTrains();
+
+for (const train of trains) {
+  if (train.LineCode === 'GT') {
+    logger.log(LogMode.DEBUG, `Trains`, train);
+  }
+}
+
 await sayHello('K-FOSS');
 
 export {};

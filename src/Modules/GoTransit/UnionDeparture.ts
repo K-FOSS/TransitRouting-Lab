@@ -3,7 +3,7 @@ import { IsDate, IsNumber, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 import { GoTransitStop } from './Stop';
 
-export class GoTransitTrip {
+export class GoTransitUnionDepartureTrip {
   @Type(() => String)
   @IsString()
   public Info: string;

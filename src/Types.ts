@@ -1,3 +1,0 @@
-interface Trip {
-  cars: number;
-}

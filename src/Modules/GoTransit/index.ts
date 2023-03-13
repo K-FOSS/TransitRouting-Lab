@@ -3,13 +3,24 @@ import { plainToInstance } from 'class-transformer';
 import got, { OptionsOfJSONResponseBody } from 'got';
 import { CONFIG } from '../../Library/Config';
 import { logger, LogMode } from '../../Library/Logger';
-import { AllDeparturesResponse, APIResponse } from './apiTypes';
-import { GoTransitTrip } from './Trip';
+import { GoTransitTrainTrip } from './TrainTrip';
+import { GoTransitUnionDepartureTrip } from './UnionDeparture';
 
 interface GoTransitConfig {
   apiToken: string;
 
   apiURL: string;
+}
+
+interface APIMetadata {
+  TimeStamp: string;
+
+  ErrorCode: string;
+
+  ErrorMessage: string;
+}
+interface APIResponse {
+  Metadata: APIMetadata;
 }
 
 export class GoTransit {
@@ -50,11 +61,22 @@ export class GoTransit {
     return request.body;
   }
 
-  public async unionDepartures(): Promise<GoTransitTrip[]> {
-    const response = await this.makeRequest<AllDeparturesResponse>(
-      'ServiceUpdate/UnionDepartures/All',
-    );
+  public async unionDepartures(): Promise<GoTransitUnionDepartureTrip[]> {
+    const response = await this.makeRequest<
+      APIResponse & { AllDepartures: { Trip: GoTransitUnionDepartureTrip[] } }
+    >('ServiceUpdate/UnionDepartures/All');
 
-    return plainToInstance(GoTransitTrip, response.AllDepartures.Trip);
+    return plainToInstance(
+      GoTransitUnionDepartureTrip,
+      response.AllDepartures.Trip,
+    );
+  }
+
+  public async getAllTrains(): Promise<GoTransitTrainTrip[]> {
+    const response = await this.makeRequest<
+      APIResponse & { Trips: { Trip: GoTransitUnionDepartureTrip[] } }
+    >('ServiceataGlance/Trains/All');
+
+    return plainToInstance(GoTransitTrainTrip, response.Trips.Trip);
   }
 }
