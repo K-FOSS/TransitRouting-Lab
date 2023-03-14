@@ -1,9 +1,10 @@
 // src/Modules/GoTransit/index.ts
-import { plainToInstance } from 'class-transformer';
+import { plainToInstance, TransformPlainToInstance } from 'class-transformer';
 import got, { OptionsOfJSONResponseBody } from 'got';
+import { Service } from 'typedi';
 import { CONFIG } from '../../Library/Config';
 import { logger, LogMode } from '../../Library/Logger';
-import { GoTransitStop, GoTransitStopType } from './Stop';
+import { GoTransitStop } from './Stop';
 import { GoTransitTrainTrip } from './TrainTrip';
 import { GoTransitUnionDepartureTrip } from './UnionDeparture';
 
@@ -21,10 +22,11 @@ interface APIMetadata {
   ErrorMessage: string;
 }
 
-interface APIResponse {
+export interface APIResponse {
   Metadata: APIMetadata;
 }
 
+@Service()
 export class GoTransit {
   private config: GoTransitConfig = {
     apiToken: CONFIG.token,
@@ -45,7 +47,7 @@ export class GoTransit {
     },
   });
 
-  private async makeRequest<ResponseType extends APIResponse>(
+  public async makeRequest<ResponseType extends APIResponse>(
     url: string,
     options?: OptionsOfJSONResponseBody,
   ): Promise<ResponseType> {
@@ -66,7 +68,7 @@ export class GoTransit {
   /**
    * Gets all the trains soon arriving at Union and the platform allocation
    * if provided/same as the departure board/go tracker.
-   * 
+   *
    * @returns array of GoTransitUnionDepartureTrip
    */
   public async unionDepartures(): Promise<GoTransitUnionDepartureTrip[]> {
@@ -79,7 +81,6 @@ export class GoTransit {
       response.AllDepartures.Trip,
     );
   }
-
 
   /**
    * Function to get all active trains within the Go Transit network.
@@ -96,15 +97,16 @@ export class GoTransit {
 
   /**
    * Get all Go Transit Stops within the network
-   * 
-   * @returns Array of all Go Transit Bus Stops, 
+   *
+   * @returns Array of all Go Transit Bus Stops,
    * Bus Terminals, Bus & Train Stations, and Park & Ride Stops
    */
+  @TransformPlainToInstance(GoTransitStop)
   public async getAllStops(): Promise<GoTransitStop[]> {
     const response = await this.makeRequest<
       APIResponse & { Stations: { Station: GoTransitStop[] } }
     >('Stop/All');
 
-    return plainToInstance(GoTransitStop, response.Stations.Station);
+    return response.Stations.Station;
   }
 }

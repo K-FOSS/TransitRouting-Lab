@@ -43,6 +43,7 @@
     "class-validator": "^0.14.0",
     "got": "^12.6.0",
     "icloudjs": "^1.4.0",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "typedi": "^0.10.0"
   }
 }

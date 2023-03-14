@@ -1,5 +1,8 @@
 // src/index.ts
 import 'reflect-metadata';
+import { Container } from 'typedi';
+import { useContainer } from 'class-validator';
+
 import { CONFIG } from './Library/Config';
 import { logger, LogMode } from './Library/Logger';
 import { GoTransit } from './Modules/GoTransit';
@@ -21,11 +24,14 @@ logger.log(LogMode.INFO, `Starting TransitRouting`);
 //   text: 'Platform 6 & 7'
 // })
 
-const goAPI = new GoTransit({
-  apiURL: CONFIG.apiURL,
+useContainer(Container);
 
+const goAPI = new GoTransit({
   apiToken: CONFIG.token,
+  apiURL: CONFIG.apiURL,
 });
+
+Container.set('transitAPI', goAPI);
 
 logger.log(LogMode.INFO, `Making request`);
 
@@ -50,6 +56,14 @@ logger.log(LogMode.INFO, `Making request`);
 //     logger.log(LogMode.DEBUG, `Trains`, train);
 //   }
 // }
+
+const stops = await goAPI.getAllStops();
+
+for (const stop of stops) {
+  const stopDetails = await stop.getStopDetails();
+
+  logger.log(LogMode.INFO, `Stop Details`, stopDetails);
+}
 
 await sayHello('K-FOSS');
 

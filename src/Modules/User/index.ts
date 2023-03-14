@@ -30,6 +30,6 @@ export class User {
    * Sends notification to user via her Apple Watch Ultra
    */
   public async notifyUser(options: { subject?: string; text?: string }) {
-    await sendAlert(this.deviceID, options);
+    return sendAlert(this.deviceID, options);
   }
 }
