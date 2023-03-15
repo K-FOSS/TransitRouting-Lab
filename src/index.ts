@@ -59,10 +59,15 @@ logger.log(LogMode.INFO, `Making request`);
 
 const stops = await goAPI.getAllStops();
 
-for (const stop of stops) {
-  const stopDetails = await stop.getStopDetails();
+const goStation = stops.find(
+  ({ LocationName, LocationType }) =>
+    LocationName === 'Bramalea GO' && LocationType === 'Train & Bus Station',
+);
 
-  logger.log(LogMode.INFO, `Stop Details`, stopDetails);
+if (goStation) {
+  const nextService = await goStation.getNextService();
+
+  logger.log(LogMode.INFO, `GoStation Next Service Details:`, nextService);
 }
 
 await sayHello('K-FOSS');

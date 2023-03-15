@@ -3,6 +3,7 @@ import { TransformPlainToInstance, Type } from 'class-transformer';
 import { IsString } from 'class-validator';
 import { Container, Service } from 'typedi';
 import { APIResponse, GoTransit } from '..';
+import { GoTransitNextService } from '../Service';
 import { GoTransitStopDetails } from './StopDetails';
 
 export enum GoTransitStopType {
@@ -38,5 +39,18 @@ export class GoTransitStop {
     >(`Stop/Details/${this.LocationCode}`);
 
     return Stop;
+  }
+
+  @TransformPlainToInstance(GoTransitNextService)
+  public async getNextService(): Promise<GoTransitNextService[]> {
+    const goAPI = Container.get<GoTransit>('transitAPI');
+
+    const {
+      NextService: { Lines },
+    } = await goAPI.makeRequest<
+      APIResponse & { NextService: { Lines: GoTransitNextService[] } }
+    >(`Stop/NextService/${this.LocationCode}`);
+
+    return Lines;
   }
 }

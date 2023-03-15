@@ -1,7 +1,9 @@
 // src/Modules/User/index.ts
+import { Service } from 'typedi';
 import { iCloudAPI, sendAlert } from '../../Library/iCloud';
 import { logger, LogMode } from '../../Library/Logger';
 
+@Service()
 export class User {
   public name: string;
 

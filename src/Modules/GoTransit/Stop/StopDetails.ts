@@ -1,7 +1,7 @@
 // src/Modules/GoTransit/Stop/StopDetails.ts
 
 import { Type } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { IsEnum, IsString } from 'class-validator';
 import { Service } from 'typedi';
 
 @Service()
@@ -43,13 +43,63 @@ export class GoTransitPlace {
   public Stops?: GoTransitPlaceStops;
 }
 
+enum StopFacilities {
+  ATM = 'ABM',
+
+  BIKE_RACK = 'BR',
+
+  DEBIT_ACCEPTED = 'DCA',
+
+  ELEVATOR = 'EV',
+
+  NEWS = 'NEWS',
+
+  PAYPHONE = 'PP',
+
+  BATHROOM = 'PW',
+
+  STATION_BUILDING = 'SB',
+
+  TAXI = 'TAXI',
+
+  TICKET_VENDING = 'TVM',
+
+  VENDING = 'RK',
+
+  WAITING_ROOM = 'WR',
+
+  WHEELCHAIR_TRAIN = 'WAT',
+
+  WHEELCHAIR_BUS = 'WAB',
+
+  SHELTERS = 'SHTR',
+
+  WIFI = 'WIFI',
+
+  PRESTO = 'TVMP',
+
+  HEATED_SHELTER = 'HSTR',
+
+  VIA_RAIL = 'VS',
+
+  RELOAD_MACHINE = 'SSRM',
+
+  CARPOOL = 'CRPL',
+
+  FOOD_BEVERAGE = 'FBS',
+
+  RESERVED_PARKING = 'RP',
+
+  KISS_N_RIDE = 'KR',
+}
+
 export class GoTransitStopFacilities {
   @Type(() => String)
-  @IsString()
+  @IsEnum(StopFacilities)
   /**
    * TODO Figure these codes out to an ENUM
    */
-  public Code: string;
+  public Code: StopFacilities;
 
   @Type(() => String)
   @IsString()
